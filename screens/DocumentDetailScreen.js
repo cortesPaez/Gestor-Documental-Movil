@@ -13,7 +13,29 @@ import { WebView } from "react-native-webview";
 import { Image } from "expo-image";
 import * as FileSystem from "expo-file-system";
 
-export default function DocumentDetailScreen({ route }) {
+export default function DocumentDetailScreen({ route, navigation }) {
+  const removeDocument = async () => {
+    Alert.alert(
+      "Eliminar documento",
+      "¿Estás seguro de que deseas eliminar este documento?",
+      [
+        { text: "Cancelar", style: "cancel" },
+        {
+          text: "Eliminar",
+          style: "destructive",
+          onPress: async () => {
+            const documentos = await loadMetadata();
+            const actualizados = documentos.filter(
+              (doc) => doc.id !== document.id
+            );
+            await saveMetadata(actualizados);
+            Alert.alert("Eliminado", "El documento ha sido eliminado.");
+            setTimeout(() => navigation.goBack(), 300);
+          },
+        },
+      ]
+    );
+  };
   const { document } = route.params;
   const [pdfSource, setPdfSource] = useState(null);
   const [nombre, setNombre] = useState(document.nombre);
@@ -93,6 +115,12 @@ export default function DocumentDetailScreen({ route }) {
             >
               <Text style={styles.editButtonText}>Editar</Text>
             </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.deleteButton}
+              onPress={removeDocument}
+            >
+              <Text style={styles.deleteButtonText}>Eliminar</Text>
+            </TouchableOpacity>
           </>
         )}
       </View>
@@ -121,6 +149,17 @@ export default function DocumentDetailScreen({ route }) {
 }
 
 const styles = StyleSheet.create({
+  deleteButton: {
+    backgroundColor: "#ff3b30",
+    padding: 10,
+    borderRadius: 8,
+    marginTop: 8,
+  },
+  deleteButtonText: {
+    color: "#fff",
+    fontWeight: "bold",
+    textAlign: "center",
+  },
   container: {
     backgroundColor: "#f3f6fb",
     padding: 18,
@@ -152,7 +191,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#2563eb",
     padding: 10,
     borderRadius: 8,
-    marginBottom: 8,
   },
   saveButtonText: {
     color: "#fff",
