@@ -1,20 +1,33 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import React from "react";
+import { NavigationContainer } from "@react-navigation/native";
+import { createStackNavigator } from "@react-navigation/stack";
+
+import DocumentListScreen from "./screens/DocumentListScreen";
+import AddDocumentScreen from "./screens/AddDocumentScreen";
+import DocumentDetailScreen from "./screens/DocumentDetailScreen"; // <-- 1. Asegúrate de que esté importada
+
+const Stack = createStackNavigator();
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <NavigationContainer>
+      <Stack.Navigator initialRouteName="DocumentList">
+        <Stack.Screen
+          name="DocumentList"
+          component={DocumentListScreen}
+          options={{ title: "Mis Documentos" }}
+        />
+        <Stack.Screen
+          name="AddDocument"
+          component={AddDocumentScreen}
+          options={{ title: "Agregar Nuevo" }}
+        />
+        <Stack.Screen // <-- 2. Debe estar declarada aquí
+          name="DocumentDetail"
+          component={DocumentDetailScreen}
+          options={({ route }) => ({ title: route.params.document.nombre })}
+        />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
