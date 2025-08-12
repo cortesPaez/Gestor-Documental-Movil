@@ -4,7 +4,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 
 import DocumentListScreen from "./screens/DocumentListScreen";
 import AddDocumentScreen from "./screens/AddDocumentScreen";
-import DocumentDetailScreen from "./screens/DocumentDetailScreen"; // <-- 1. Asegúrate de que esté importada
+import DocumentDetailScreen from "./screens/DocumentDetailScreen";
 
 const Stack = createStackNavigator();
 
@@ -22,7 +22,7 @@ export default function App() {
           component={AddDocumentScreen}
           options={{ title: "Agregar Nuevo" }}
         />
-        <Stack.Screen // <-- 2. Debe estar declarada aquí
+        <Stack.Screen
           name="DocumentDetail"
           component={DocumentDetailScreen}
           options={({ route }) => ({ title: route.params.document.nombre })}
