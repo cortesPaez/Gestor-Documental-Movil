@@ -38,19 +38,26 @@ export default function DocumentListScreen({ navigation }) {
     return matchesSearch && matchesFilter;
   });
 
-  const renderItem = ({ item }) => (
-    <TouchableOpacity
-      style={styles.documentItem}
-      onPress={() => navigation.navigate("DocumentDetail", { document: item })}
-    >
-      <Text style={styles.documentName}>📁 {item.nombre}</Text>
-      <Text>Categoría: {item.categoria}</Text>
-      <Text>Tipo: {item.tipo}</Text>
-      <Text>
-        Fecha de carga: {new Date(item.fechaCarga).toLocaleDateString()}
-      </Text>
-    </TouchableOpacity>
-  );
+  const renderItem = ({ item }) => {
+    const icon = item.tipo.toLowerCase() === "pdf" ? "📄" : "🖼️";
+    return (
+      <TouchableOpacity
+        style={styles.documentItem}
+        onPress={() =>
+          navigation.navigate("DocumentDetail", { document: item })
+        }
+      >
+        <Text style={styles.documentName}>
+          {icon} {item.nombre}
+        </Text>
+        <Text>Categoría: {item.categoria}</Text>
+        <Text>Tipo: {item.tipo}</Text>
+        <Text>
+          Fecha de carga: {new Date(item.fechaCarga).toLocaleDateString()}
+        </Text>
+      </TouchableOpacity>
+    );
+  };
 
   return (
     <View style={styles.container}>
@@ -213,6 +220,5 @@ const styles = StyleSheet.create({
   },
   text: {
     color: "#fff",
-    fontSize: 16,
   },
 });
